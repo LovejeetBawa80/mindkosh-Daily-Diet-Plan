@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Diet Plan Tool</title>
+    <meta name="description" content="Create your personalized daily diet plan based on your age, weight, height, sex, and activity level. Optimize for weight loss, weight gain, or maintenance. Get detailed meal plans with nutrition information.">
+    <meta name="keywords" content="diet plan, weight loss, weight gain, nutrition, calories, fat, protein, carbs, health">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        #user-input {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, select, button {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        #diet-plan {
+            margin-top: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+            width: 100%;
+            bottom: 0;
+        }
+
+        .ad-space {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .meal-recommendation {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-left: 4px solid #333;
+        }
+
+        .avoid-recommendation {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #ffe6e6;
+            border-left: 4px solid #ff4d4d;
+        }
+
+        .meal-nutrition {
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #555;
+        }
+    </style>
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+    <header>
+        <h1>Daily Diet Plan Tool</h1>
+    </header>
+    <main>
+        <section id="user-input">
+            <h2>Enter Your Details</h2>
+            <form id="diet-form">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" required>
+
+                <label for="weight">Weight (kg):</label>
+                <input type="number" id="weight" name="weight" required>
+
+                <label for="height">Height (cm):</label>
+                <input type="number" id="height" name="height" required>
+
+                <label for="sex">Sex:</label>
+                <select id="sex" name="sex" required>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+
+                <label for="activity-level">Activity Level:</label>
+                <select id="activity-level" name="activity-level" required>
+                    <option value="sedentary">Sedentary</option>
+                    <option value="lightly-active">Lightly Active</option>
+                    <option value="moderately-active">Moderately Active</option>
+                    <option value="very-active">Very Active</option>
+                    <option value="extra-active">Extra Active</option>
+                </select>
+
+                <label for="goal">Goal:</label>
+                <select id="goal" name="goal" required>
+                    <option value="loss">Weight Loss</option>
+                    <option value="gain">Weight Gain</option>
+                    <option value="maintain">Maintain Weight</option>
+                </select>
+
+                <label for="duration">Duration:</label>
+                <select id="duration" name="duration" required>
+                    <option value="1">1 Day</option>
+                    <option value="3">3 Days</option>
+                    <option value="7">7 Days</option>
+                </select>
+
+                <button type="submit">Generate Diet Plan</button>
+            </form>
+        </section>
+
+        <div class="ad-space">
+            <!-- Google AdSense Ad Unit -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                 data-ad-slot="XXXXXXXXXX"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <section id="diet-plan">
+            <h2>Your Diet Plan</h2>
+            <div id="plan-details"></div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 Daily Diet Plan Tool. All rights reserved.</p>
+    </footer>
+    <script>
+        document.getElementById('diet-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const age = parseInt(document.getElementById('age').value);
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const sex = document.getElementById('sex').value;
+            const activityLevel = document.getElementById('activity-level').value;
+            const goal = document.getElementById('goal').value;
+            const duration = parseInt(document.getElementById('duration').value);
+
+            const bmr = calculateBMR(weight, height, age, sex);
+            const tdee = calculateTDEE(bmr, activityLevel);
+            const adjustedCalories = adjustCaloriesForGoal(tdee, goal);
+            const dietPlan = generateDietPlan(adjustedCalories, duration, goal);
+
+            displayDietPlan(dietPlan, goal);
+        });
+
+        function calculateBMR(weight, height, age, sex) {
+            if (sex === 'male') {
+                return 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
+            } else {
+                return 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
+            }
+        }
+
+        function calculateTDEE(bmr, activityLevel) {
+            const activityMultipliers = {
+                'sedentary': 1.2,
+                'lightly-active': 1.375,
+                'moderately-active': 1.55,
+                'very-active': 1.725,
+                'extra-active': 1.9
+            };
+            return bmr * activityMultipliers[activityLevel];
+        }
+
+        function adjustCaloriesForGoal(tdee, goal) {
+            if (goal === 'loss') {
+                return tdee - 500; // Reduce calories for weight loss
+            } else if (goal === 'gain') {
+                return tdee + 500; // Increase calories for weight gain
+            } else {
+                return tdee; // Maintain calories
+            }
+        }
+
+        function generateDietPlan(calories, duration, goal) {
+            const dietPlan = [];
+            for (let i = 0; i < duration; i++) {
+                dietPlan.push({
+                    day: i + 1,
+                    calories: calories,
+                    fat: (calories * 0.25 / 9).toFixed(2), // 25% of calories from fat
+                    protein: (calories * 0.15 / 4).toFixed(2), // 15% of calories from protein
+                    carbs: (calories * 0.6 / 4).toFixed(2), // 60% of calories from carbs
+                    meals: getMealRecommendations(goal, i + 1),
+                    avoid: getAvoidRecommendations(goal)
+                });
+            }
+            return dietPlan;
+        }
+
+        function getMealRecommendations(goal, day) {
+            const meals = {
+                loss: [
+                    {
+                        breakfast: { name: "Oatmeal with fruits", calories: 300, protein: 10, fat: 5, carbs: 50 },
+                        lunch: { name: "Grilled chicken salad", calories: 400, protein: 30, fat: 10, carbs: 20 },
+                        dinner: { name: "Steamed vegetables with quinoa", calories: 350, protein: 15, fat: 8, carbs: 40 }
+                    },
+                    {
+                        breakfast: { name: "Greek yogurt with berries", calories: 250, protein: 20, fat: 5, carbs: 30 },
+                        lunch: { name: "Turkey and avocado wrap", calories: 450, protein: 25, fat: 15, carbs: 35 },
+                        dinner: { name: "Baked salmon with asparagus", calories: 400, protein: 35, fat: 20, carbs: 10 }
+                    },
+                    {
+                        breakfast: { name: "Smoothie with spinach and banana", calories: 200, protein: 10, fat: 3, carbs: 35 },
+                        lunch: { name: "Quinoa and black bean bowl", calories: 350, protein: 15, fat: 8, carbs: 45 },
+                        dinner: { name: "Grilled shrimp with zucchini noodles", calories: 300, protein: 25, fat: 10, carbs: 20 }
+                    }
+                ],
+                gain: [
+                    {
+                        breakfast: { name: "Scrambled eggs with avocado toast", calories: 500, protein: 20, fat: 25, carbs: 40 },
+                        lunch: { name: "Brown rice with beef and vegetables", calories: 600, protein: 35, fat: 20, carbs: 50 },
+                        dinner: { name: "Salmon with sweet potatoes", calories: 550, protein: 40, fat: 25, carbs: 45 }
+                    },
+                    {
+                        breakfast: { name: "Protein pancakes with syrup", calories: 450, protein: 25, fat: 15, carbs: 50 },
+                        lunch: { name: "Chicken and rice bowl", calories: 650, protein: 40, fat: 20, carbs: 60 },
+                        dinner: { name: "Beef stir-fry with noodles", calories: 600, protein: 35, fat: 25, carbs: 55 }
+                    },
+                    {
+                        breakfast: { name: "Omelette with cheese and veggies", calories: 400, protein: 30, fat: 20, carbs: 15 },
+                        lunch: { name: "Pasta with meatballs", calories: 700, protein: 35, fat: 30, carbs: 70 },
+                        dinner: { name: "Grilled chicken with mashed potatoes", calories: 550, protein: 40, fat: 20, carbs: 50 }
+                    }
+                ],
+                maintain: [
+                    {
+                        breakfast: { name: "Yogurt with granola", calories: 350, protein: 15, fat: 10, carbs: 45 },
+                        lunch: { name: "Whole grain sandwich with turkey", calories: 400, protein: 25, fat: 12, carbs: 40 },
+                        dinner: { name: "Stir-fried tofu with rice", calories: 450, protein: 20, fat: 15, carbs: 50 }
+                    },
+                    {
+                        breakfast: { name: "Smoothie bowl with nuts", calories: 300, protein: 10, fat: 8, carbs: 40 },
+                        lunch: { name: "Chicken Caesar salad", calories: 450, protein: 30, fat: 20, carbs: 25 },
+                        dinner: { name: "Grilled fish with couscous", calories: 400, protein: 35, fat: 15, carbs: 30 }
+                    },
+                    {
+                        breakfast: { name: "Avocado toast with eggs", calories: 350, protein: 20, fat: 15, carbs: 30 },
+                        lunch: { name: "Quinoa and vegetable stir-fry", calories: 400, protein: 15, fat: 10, carbs: 50 },
+                        dinner: { name: "Lentil soup with whole grain bread", calories: 450, protein: 25, fat: 12, carbs: 40 }
+                    }
+                ]
+            };
+
+            const mealPlan = meals[goal][(day - 1) % meals[goal].length]; // Cycle through meals
+            return mealPlan;
+        }
+
+        function getAvoidRecommendations(goal) {
+            if (goal === 'loss') {
+                return ["Sugary drinks", "Processed snacks", "Fried foods"];
+            } else if (goal === 'gain') {
+                return ["Low-calorie foods", "Sugary snacks", "Excessive cardio"];
+            } else {
+                return ["Junk food", "Excessive sugar", "Unhealthy fats"];
+            }
+        }
+
+        function displayDietPlan(dietPlan, goal) {
+            const planDetails = document.getElementById('plan-details');
+            planDetails.innerHTML = '';
+
+            dietPlan.forEach(day => {
+                const dayPlan = document.createElement('div');
+                dayPlan.innerHTML = `
+                    <h3>Day ${day.day}</h3>
+                    <p><strong>Calories:</strong> ${day.calories.toFixed(2)} kcal</p>
+                    <p><strong>Fat:</strong> ${day.fat} g</p>
+                    <p><strong>Protein:</strong> ${day.protein} g</p>
+                    <p><strong>Carbs:</strong> ${day.carbs} g</p>
+                    <div class="meal-recommendation">
+                        <h4>Meal Recommendations:</h4>
+                        <ul>
+                            <li><strong>Breakfast:</strong> ${day.meals.breakfast.name}
+                                <div class="meal-nutrition">(Calories: ${day.meals.breakfast.calories}, Protein: ${day.meals.breakfast.protein}g, Fat: ${day.meals.breakfast.fat}g, Carbs: ${day.meals.breakfast.carbs}g)</div>
+                            </li>
+                            <li><strong>Lunch:</strong> ${day.meals.lunch.name}
+                                <div class="meal-nutrition">(Calories: ${day.meals.lunch.calories}, Protein: ${day.meals.lunch.protein}g, Fat: ${day.meals.lunch.fat}g, Carbs: ${day.meals.lunch.carbs}g)</div>
+                            </li>
+                            <li><strong>Dinner:</strong> ${day.meals.dinner.name}
+                                <div class="meal-nutrition">(Calories: ${day.meals.dinner.calories}, Protein: ${day.meals.dinner.protein}g, Fat: ${day.meals.dinner.fat}g, Carbs: ${day.meals.dinner.carbs}g)</div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="avoid-recommendation">
+                        <h4>Avoid:</h4>
+                        <ul>
+                            ${day.avoid.map(item => `<li>${item}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+                planDetails.appendChild(dayPlan);
+            });
+        }
+    </script>
+</body>
+</html>
